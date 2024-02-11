@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { NftsService } from './nfts.service';
 import { NftModel } from './nfts.model';
 import { CreateNftDTO } from './dto/create-nft.dto';
@@ -12,6 +12,11 @@ export class NftsController {
     const NFTS = this.NftsServices.getAllNfts();
     console.log(NFTS);
     return NFTS;
+  }
+
+  @Get('/:id')
+  getNftById(@Param('id') id: string): NftModel {
+    return this.NftsServices.getNftById(id);
   }
 
   @Post()

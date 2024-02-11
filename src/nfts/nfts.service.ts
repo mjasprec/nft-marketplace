@@ -23,6 +23,10 @@ export class NftsService {
     return this.NFTS;
   }
 
+  getNftById(id: string): NftModel {
+    return this.getAllNfts().find((nft) => nft.id === id);
+  }
+
   createNft(createNftDto: CreateNftDTO): NftModel {
     const { image, title, description, category, price, owner, creator } =
       createNftDto;
