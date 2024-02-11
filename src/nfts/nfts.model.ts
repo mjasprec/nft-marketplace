@@ -1,4 +1,4 @@
-export interface Nfts {
+export interface NftModel {
   id: string;
   image: string;
   title: string;

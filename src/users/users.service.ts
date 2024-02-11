@@ -20,7 +20,7 @@ export class UsersService {
     },
   ];
 
-  getAllUsers() {
+  getAllUsers(): UsersModel[] {
     return this.users;
   }
 }

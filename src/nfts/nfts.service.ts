@@ -17,7 +17,7 @@ export class NftsService {
     },
   ];
 
-  getAllNfts() {
+  getAllNfts(): NftModel[] {
     return this.NFTS;
   }
 }
