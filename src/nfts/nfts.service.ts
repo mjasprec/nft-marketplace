@@ -27,6 +27,12 @@ export class NftsService {
     return this.getAllNfts().find((nft) => nft.id === id);
   }
 
+  deleteNftById(id: string): NftModel[] {
+    const updatedNfts = this.getAllNfts().filter((nft) => nft.id !== id);
+
+    return this.NFTS.splice(0, this.NFTS.length, ...updatedNfts);
+  }
+
   createNft(createNftDto: CreateNftDTO): NftModel {
     const { image, title, description, category, price, owner, creator } =
       createNftDto;

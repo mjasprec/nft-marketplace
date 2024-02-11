@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { NftsService } from './nfts.service';
 import { NftModel } from './nfts.model';
 import { CreateNftDTO } from './dto/create-nft.dto';
@@ -17,6 +17,11 @@ export class NftsController {
   @Get('/:id')
   getNftById(@Param('id') id: string): NftModel {
     return this.NftsServices.getNftById(id);
+  }
+
+  @Delete('/:id')
+  deleteNftById(@Param('id') id: string): NftModel[] {
+    return this.NftsServices.deleteNftById(id);
   }
 
   @Post()
