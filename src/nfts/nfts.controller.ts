@@ -1,4 +1,12 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { NftsService } from './nfts.service';
 
 @Controller('nfts')
-export class NftsController {}
+export class NftsController {
+  constructor(private NftsServices: NftsService) {}
+
+  @Get()
+  getAllNfts() {
+    return this.NftsServices.getAllNfts();
+  }
+}
