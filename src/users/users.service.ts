@@ -31,6 +31,12 @@ export class UsersService {
     return users.find((user) => user.id === id);
   }
 
+  deleteUserById(id: string): UsersModel[] {
+    const updatedUsers = this.getAllUsers().filter((user) => user.id !== id);
+
+    return this.users.splice(0, this.users.length, ...updatedUsers);
+  }
+
   createUser(createUserDto: CreateUserDTO): UsersModel {
     const {
       username,
