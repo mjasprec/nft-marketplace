@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersModel } from './users.model';
 import { CreateUserDTO } from './dto/create-user.dto';
@@ -10,9 +10,12 @@ export class UsersController {
   @Get()
   getAllUsers(): UsersModel[] {
     const users = this.userServices.getAllUsers();
-
-    console.log(users);
     return users;
+  }
+
+  @Get('/:id')
+  getUserById(@Param('id') id: string): UsersModel {
+    return this.userServices.getUserById(id);
   }
 
   @Post()

@@ -26,6 +26,11 @@ export class UsersService {
     return this.users;
   }
 
+  getUserById(id: string): UsersModel {
+    const users = this.getAllUsers();
+    return users.find((user) => user.id === id);
+  }
+
   createUser(createUserDto: CreateUserDTO): UsersModel {
     const {
       username,
