@@ -1,4 +1,4 @@
-export interface Users {
+export interface UsersModel {
   id: string;
   username: string;
   email: string;
@@ -6,7 +6,7 @@ export interface Users {
   firstName: string;
   lastName: string;
   aboutMe: string;
-  birthday: Date;
+  birthday: string;
   wallet: number;
   nfts: any[];
   gender: UserGender;

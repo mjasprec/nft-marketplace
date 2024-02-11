@@ -9,7 +9,7 @@ export class UsersController {
   getAllUsers() {
     const users = this.userServices.getAllUsers();
 
-    console.log(users.length);
+    console.log(users);
     return users;
   }
 }

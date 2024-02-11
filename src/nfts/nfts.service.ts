@@ -1,22 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { NftModel, NftCategory } from './nfts.model';
 
 @Injectable()
 export class NftsService {
-  private NFTS = [
+  private NFTS: NftModel[] = [
     {
-      title: 'Dragon',
-    },
-    {
-      title: 'Lizard',
-    },
-    {
-      title: 'Eagle',
-    },
-    {
-      title: 'Elephant',
-    },
-    {
-      title: 'Wolf',
+      id: '1',
+      image: 'http://testimage.net',
+      title: 'Conor McGregor',
+      description: 'MMA Fighter',
+      category: NftCategory.SPORTS,
+      price: 300,
+      owner: 'MMAGuru',
+      creator: 'MMAGuru',
+      comments: ['comment 1', 'comment 2'],
     },
   ];
 

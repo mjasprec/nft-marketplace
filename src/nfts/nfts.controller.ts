@@ -7,6 +7,8 @@ export class NftsController {
 
   @Get()
   getAllNfts() {
-    return this.NftsServices.getAllNfts();
+    const NFTS = this.NftsServices.getAllNfts();
+    console.log(NFTS);
+    return NFTS;
   }
 }
