@@ -7,7 +7,7 @@ export interface NftModel {
   price: number;
   owner: string;
   creator: string;
-  comments: any[];
+  comments?: any[];
 }
 
 export enum NftCategory {

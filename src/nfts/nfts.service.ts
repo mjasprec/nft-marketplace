@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { NftModel, NftCategory } from './nfts.model';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class NftsService {
@@ -19,5 +20,25 @@ export class NftsService {
 
   getAllNfts(): NftModel[] {
     return this.NFTS;
+  }
+
+  createNft(nft: NftModel): NftModel {
+    const { image, title, description, category, price, owner, creator } = nft;
+
+    const newNft: NftModel = {
+      id: uuid(),
+      image,
+      title,
+      description,
+      category,
+      price,
+      owner,
+      creator,
+      comments: [],
+    };
+
+    this.NFTS.push(newNft);
+
+    return newNft;
   }
 }
