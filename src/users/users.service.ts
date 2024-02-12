@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UsersModel, UserRole, UserGender } from './users.model';
 import { v4 as uuid } from 'uuid';
 import { CreateUserDTO } from './dto/create-user.dto';
+import { GetUserFilterDTO } from './dto/get-user-filter.dto';
 
 @Injectable()
 export class UsersService {
@@ -22,17 +23,65 @@ export class UsersService {
     },
   ];
 
-  getAllUsers(): UsersModel[] {
+  getUsers(): UsersModel[] {
     return this.users;
   }
 
+  getUsersWithFilter(filterUsersDto: GetUserFilterDTO): UsersModel[] {
+    const { username, firstName, lastName, searchTerm } = filterUsersDto;
+    let filteredUsers = this.getUsers();
+
+    if (username) {
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          user.username.toLocaleLowerCase() === username.toLocaleLowerCase(),
+      );
+    }
+
+    if (firstName) {
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          user.firstName.toLocaleLowerCase() === firstName.toLocaleLowerCase(),
+      );
+    }
+
+    if (lastName) {
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          user.lastName.toLocaleLowerCase() === lastName.toLocaleLowerCase(),
+      );
+    }
+
+    if (searchTerm) {
+      filteredUsers.filter((user) => {
+        if (
+          user.username
+            .toLocaleLowerCase()
+            .includes(searchTerm.toLocaleLowerCase()) ||
+          user.lastName
+            .toLocaleLowerCase()
+            .includes(searchTerm.toLocaleLowerCase()) ||
+          user.firstName
+            .toLocaleLowerCase()
+            .includes(searchTerm.toLocaleLowerCase())
+        ) {
+          return true;
+        }
+
+        return false;
+      });
+    }
+
+    return filteredUsers;
+  }
+
   getUserById(id: string): UsersModel {
-    const users = this.getAllUsers();
+    const users = this.getUsers();
     return users.find((user) => user.id === id);
   }
 
   deleteUserById(id: string): UsersModel[] {
-    const updatedUsers = this.getAllUsers().filter((user) => user.id !== id);
+    const updatedUsers = this.getUsers().filter((user) => user.id !== id);
 
     return this.users.splice(0, this.users.length, ...updatedUsers);
   }

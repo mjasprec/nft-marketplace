@@ -6,19 +6,24 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersModel } from './users.model';
 import { CreateUserDTO } from './dto/create-user.dto';
+import { GetUserFilterDTO } from './dto/get-user-filter.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private userServices: UsersService) {}
 
   @Get()
-  getAllUsers(): UsersModel[] {
-    const users = this.userServices.getAllUsers();
-    return users;
+  getUsers(@Query() filterUsersDto: GetUserFilterDTO): UsersModel[] {
+    if (Object.keys(filterUsersDto).length > 0) {
+      return this.userServices.getUsersWithFilter(filterUsersDto);
+    }
+
+    return this.userServices.getUsers();
   }
 
   @Get('/:id')
