@@ -15,7 +15,7 @@ export class UsersService {
       firstName: 'Donald',
       lastName: 'Trump',
       aboutMe: 'NFT Collector',
-      birthday: '04/04/1989',
+      birthday: new Date('2000-05-05'),
       wallet: 1000,
       nfts: ['NFT 1', 'NFT 2'],
       gender: UserGender.MALE,
