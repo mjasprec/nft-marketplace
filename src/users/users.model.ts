@@ -6,7 +6,7 @@ export interface UsersModel {
   firstName: string;
   lastName: string;
   aboutMe: string;
-  birthday: string;
+  birthday: Date;
   wallet: number;
   nfts: any[];
   gender: UserGender;
