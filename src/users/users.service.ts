@@ -16,7 +16,7 @@ export class UsersService {
       lastName: 'Trump',
       aboutMe: 'NFT Collector',
       birthday: '2000-05-05',
-      wallet: '1000',
+      wallet: 1000,
       nfts: ['NFT 1', 'NFT 2'],
       gender: UserGender.MALE,
       role: UserRole.USER,
@@ -123,9 +123,10 @@ export class UsersService {
       lastName,
       aboutMe,
       birthday,
-      wallet,
       gender,
     } = createUserDto;
+
+    const wallet = Number(createUserDto.wallet);
 
     const newUser = {
       id: uuid(),

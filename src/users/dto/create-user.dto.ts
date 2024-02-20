@@ -1,23 +1,23 @@
 import {
-  IsDate,
   IsEmail,
-  IsInt,
   IsNotEmpty,
-  IsString,
   Length,
-  Max,
+  MaxLength,
   Min,
+  MinLength,
+  IsNumber,
+  Max,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { UserGender, UserRole } from '../users.model';
 
 export class CreateUserDTO {
-  @Length(6, 30)
+  @Length(6, 24)
   username: string;
 
   @IsEmail()
   email: string;
 
-  @IsString()
   @Length(6, 30)
   password: string;
 
@@ -27,20 +27,25 @@ export class CreateUserDTO {
   @IsNotEmpty()
   lastName: string;
 
-  @IsNotEmpty()
+  @MinLength(2)
+  @MaxLength(255)
   aboutMe: string;
 
-  @IsDate()
-  birthday: Date;
+  // @IsDate()
+  // @IsString()
+  // @IsNotEmpty()
+  birthday: string;
 
-  @IsInt()
+  @IsNumber()
   @Min(0)
   @Max(1000000)
+  @Transform(({ value }) => Number(value))
   wallet: number;
 
   nfts: [];
 
   @IsNotEmpty()
   gender: UserGender;
+
   role: UserRole;
 }
