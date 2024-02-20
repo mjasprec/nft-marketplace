@@ -15,8 +15,8 @@ export class UsersService {
       firstName: 'Donald',
       lastName: 'Trump',
       aboutMe: 'NFT Collector',
-      birthday: new Date('2000-05-05'),
-      wallet: 1000,
+      birthday: '2000-05-05',
+      wallet: '1000',
       nfts: ['NFT 1', 'NFT 2'],
       gender: UserGender.MALE,
       role: UserRole.USER,
@@ -30,12 +30,15 @@ export class UsersService {
   getUsersWithFilter(filterUsersDto: GetUserFilterDTO): UsersModel[] {
     const { username, firstName, lastName, searchTerm } = filterUsersDto;
     let filteredUsers = this.getUsers();
+    let isMatch = false;
 
     if (username) {
       filteredUsers = filteredUsers.filter(
         (user) =>
           user.username.toLocaleLowerCase() === username.toLocaleLowerCase(),
       );
+
+      isMatch = Boolean(filteredUsers.length);
     }
 
     if (firstName) {
@@ -43,6 +46,8 @@ export class UsersService {
         (user) =>
           user.firstName.toLocaleLowerCase() === firstName.toLocaleLowerCase(),
       );
+
+      isMatch = Boolean(filteredUsers.length);
     }
 
     if (lastName) {
@@ -50,6 +55,8 @@ export class UsersService {
         (user) =>
           user.lastName.toLocaleLowerCase() === lastName.toLocaleLowerCase(),
       );
+
+      isMatch = Boolean(filteredUsers.length);
     }
 
     if (searchTerm) {
@@ -65,14 +72,15 @@ export class UsersService {
             .toLocaleLowerCase()
             .includes(searchTerm.toLocaleLowerCase())
         ) {
+          isMatch = true;
           return true;
         }
-
+        isMatch = false;
         return false;
       });
     }
 
-    return filteredUsers;
+    return isMatch ? filteredUsers : [];
   }
 
   getUserById(id: string): UsersModel {
