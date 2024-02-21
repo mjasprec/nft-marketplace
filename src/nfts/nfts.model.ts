@@ -8,6 +8,12 @@ export interface NftModel {
   owner: string;
   creator: string;
   comments?: any[];
+  status: NftStatus;
+}
+
+export enum NftStatus {
+  ENABLED = 'ENABLED',
+  DISABLED = 'DISABLED',
 }
 
 export enum NftCategory {

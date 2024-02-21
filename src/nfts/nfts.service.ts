@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { NftModel, NftCategory } from './nfts.model';
+import { NftModel, NftCategory, NftStatus } from './nfts.model';
 import { v4 as uuid } from 'uuid';
 import { CreateNftDTO } from './dto/create-nft.dto';
 import { GetNftFilterDTO } from './dto/get-nft-filter.dto';
@@ -17,6 +17,7 @@ export class NftsService {
       owner: 'MMAGuru',
       creator: 'MMAGuru',
       comments: ['comment 1', 'comment 2'],
+      status: NftStatus.ENABLED,
     },
   ];
 
@@ -29,35 +30,42 @@ export class NftsService {
       getNftsWithFilter;
 
     let allNfts = this.getNfts();
+    let isMatch = false;
 
     if (title) {
       allNfts = allNfts.filter(
         (nft) => nft.title.toLowerCase() === title.toLowerCase(),
       );
+
+      isMatch = Boolean(allNfts.length);
     }
 
     if (description) {
       allNfts = allNfts.filter(
         (nft) => nft.description.toLowerCase() === description.toLowerCase(),
       );
+      isMatch = Boolean(allNfts.length);
     }
 
     if (category) {
       allNfts = allNfts.filter(
         (nft) => nft.category === category.toUpperCase(),
       );
+      isMatch = Boolean(allNfts.length);
     }
 
     if (owner) {
       allNfts = allNfts.filter(
         (nft) => nft.owner.toLowerCase() === owner.toLowerCase(),
       );
+      isMatch = Boolean(allNfts.length);
     }
 
     if (creator) {
       allNfts = allNfts.filter(
         (nft) => nft.creator.toLowerCase() === creator.toLowerCase(),
       );
+      isMatch = Boolean(allNfts.length);
     }
 
     if (searchTerm) {
@@ -69,14 +77,16 @@ export class NftsService {
           nft.owner.toLowerCase().includes(searchTerm.toLowerCase()) ||
           nft.creator.toLowerCase().includes(searchTerm.toLowerCase())
         ) {
+          isMatch = true;
           return true;
         }
 
+        isMatch = true;
         return false;
       });
     }
 
-    return allNfts;
+    return isMatch ? allNfts : [];
   }
 
   getNftById(id: string): NftModel {
@@ -90,8 +100,10 @@ export class NftsService {
   }
 
   createNft(createNftDto: CreateNftDTO): NftModel {
-    const { image, title, description, category, price, owner, creator } =
+    const { image, title, description, category, owner, creator } =
       createNftDto;
+
+    const price = Number(createNftDto.price);
 
     const newNft: NftModel = {
       id: uuid(),
@@ -103,6 +115,7 @@ export class NftsService {
       owner,
       creator,
       comments: [],
+      status: NftStatus.ENABLED,
     };
 
     this.NFTS.push(newNft);

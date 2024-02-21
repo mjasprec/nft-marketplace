@@ -1,6 +1,7 @@
-import { NftCategory } from '../nfts.model';
+import { Transform } from 'class-transformer';
+import { NftCategory, NftStatus } from '../nfts.model';
 
-import { IsNotEmpty, Length, IsInt, Min, Max } from 'class-validator';
+import { IsNotEmpty, Length, Min, Max, IsNumber } from 'class-validator';
 
 export class CreateNftDTO {
   @IsNotEmpty()
@@ -11,11 +12,14 @@ export class CreateNftDTO {
 
   @Length(0, 255)
   description: string;
+
+  @IsNotEmpty()
   category: NftCategory;
 
-  @IsInt()
+  @IsNumber()
   @Min(0)
-  @Max(500)
+  @Max(1000000)
+  @Transform(({ value }) => Number(value))
   price: number;
 
   @IsNotEmpty()
@@ -23,4 +27,6 @@ export class CreateNftDTO {
 
   @IsNotEmpty()
   creator: string;
+
+  status: NftStatus;
 }
