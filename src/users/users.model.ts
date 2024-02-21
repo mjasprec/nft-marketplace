@@ -11,6 +11,12 @@ export interface UsersModel {
   nfts: any[];
   gender: UserGender;
   role: UserRole;
+  status: UserStatus;
+}
+
+export enum UserStatus {
+  ACTIVE = 'ACTIVE',
+  DISABLED = 'DISABLED',
 }
 
 export enum UserRole {

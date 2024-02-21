@@ -10,7 +10,7 @@ import {
   IsDate,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { UserGender, UserRole } from '../users.model';
+import { UserGender, UserRole, UserStatus } from '../users.model';
 
 export class CreateUserDTO {
   @Length(6, 24)
@@ -48,4 +48,6 @@ export class CreateUserDTO {
   gender: UserGender;
 
   role: UserRole;
+
+  status: UserStatus;
 }

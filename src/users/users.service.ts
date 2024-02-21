@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UsersModel, UserRole, UserGender } from './users.model';
+import { UsersModel, UserRole, UserGender, UserStatus } from './users.model';
 import { v4 as uuid } from 'uuid';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { GetUserFilterDTO } from './dto/get-user-filter.dto';
@@ -20,6 +20,7 @@ export class UsersService {
       nfts: ['NFT 1', 'NFT 2'],
       gender: UserGender.MALE,
       role: UserRole.USER,
+      status: UserStatus.ACTIVE,
     },
   ];
 
@@ -134,6 +135,7 @@ export class UsersService {
       nfts: [],
       gender,
       role: UserRole.USER,
+      status: UserStatus.ACTIVE,
     };
 
     this.users.push(newUser);
