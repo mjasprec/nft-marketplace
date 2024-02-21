@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { NftModel, NftCategory, NftStatus } from './nfts.model';
 import { v4 as uuid } from 'uuid';
 import { CreateNftDTO } from './dto/create-nft.dto';
@@ -90,13 +90,23 @@ export class NftsService {
   }
 
   getNftById(id: string): NftModel {
-    return this.getNfts().find((nft) => nft.id === id);
+    const matchedNft = this.getNfts().find((nft) => nft.id === id);
+
+    if (!matchedNft) {
+      throw new NotFoundException('NFT not found/does not exist.');
+    }
+
+    return matchedNft;
   }
 
   deleteNftById(id: string): NftModel[] {
-    const updatedNfts = this.getNfts().filter((nft) => nft.id !== id);
+    // const updatedNfts = this.getNfts().filter((nft) => nft.id !== id);
 
-    return this.NFTS.splice(0, this.NFTS.length, ...updatedNfts);
+    // return this.NFTS.splice(0, this.NFTS.length, ...updatedNfts);
+
+    const isMatchedNft = this.getNftById(id);
+
+    return this.NFTS.filter((nft) => nft.id !== isMatchedNft.id);
   }
 
   createNft(createNftDto: CreateNftDTO): NftModel {
