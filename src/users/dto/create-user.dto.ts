@@ -9,6 +9,7 @@ import {
   Max,
   // IsDate,
   IsDateString,
+  IsOptional,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { UserGender, UserRole, UserStatus } from '../users.model';
@@ -29,6 +30,7 @@ export class CreateUserDTO {
   @IsNotEmpty()
   lastName: string;
 
+  @IsOptional()
   @MinLength(2)
   @MaxLength(255)
   aboutMe: string;
