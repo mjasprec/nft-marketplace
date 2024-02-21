@@ -12,6 +12,7 @@ import { UsersService } from './users.service';
 import { UsersModel } from './users.model';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { GetUserFilterDTO } from './dto/get-user-filter.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -39,9 +40,9 @@ export class UsersController {
   @Patch('/:id')
   updateUserById(
     @Param('id') id: string,
-    @Body() createUserDto: CreateUserDTO,
+    @Body() updateUserDto: UpdateUserDto,
   ): UsersModel {
-    return this.userServices.updateUserById(id, createUserDto);
+    return this.userServices.updateUserById(id, updateUserDto);
   }
 
   @Patch('/:id/email')

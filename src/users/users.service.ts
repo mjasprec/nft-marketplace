@@ -3,6 +3,7 @@ import { UsersModel, UserRole, UserGender, UserStatus } from './users.model';
 import { v4 as uuid } from 'uuid';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { GetUserFilterDTO } from './dto/get-user-filter.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -103,12 +104,12 @@ export class UsersService {
     return this.users.filter((user) => user.id !== isMatchedUser.id);
   }
 
-  updateUserById(id: string, createUserDto: CreateUserDTO): UsersModel {
+  updateUserById(id: string, updateUserDto: UpdateUserDto): UsersModel {
     const userToUpdate = this.getUserById(id);
 
-    Object.assign(userToUpdate, createUserDto);
+    Object.assign(userToUpdate, updateUserDto);
 
-    // Object.entries(createUserDto).reduce((accumulator, [key, value]) => {
+    // Object.entries(updateUserDto).reduce((accumulator, [key, value]) => {
     //   userToUpdate[key] = value;
     //   return accumulator;
     // }, {});
