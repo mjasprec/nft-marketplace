@@ -1,16 +1,19 @@
 import {
   Controller,
   Get,
+  Post,
   Param,
-  // Body,
+  Body,
+  Delete,
   // Delete,
 
   // Patch,
-  // Post,
+
   // Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersEntity } from './users.entity';
+import { CreateUserDTO } from './dto/create-user.dto';
 // import { CreateUserDTO } from './dto/create-user.dto';
 // import { GetUserFilterDTO } from './dto/get-user-filter.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
@@ -19,9 +22,23 @@ import { UsersEntity } from './users.entity';
 export class UsersController {
   constructor(private userServices: UsersService) {}
 
+  @Get()
+  getUsers(): Promise<UsersEntity[]> {
+    return this.userServices.getUsers();
+  }
+
   @Get('/:id')
   getUserById(@Param('id') id: string): Promise<UsersEntity> {
-    console.log('UsersService');
     return this.userServices.getUserById(id);
+  }
+
+  @Delete('/:id')
+  deleteUserById(@Param('id') id: string): Promise<UsersEntity> {
+    return this.userServices.deleteUserById(id);
+  }
+
+  @Post('/')
+  createUser(@Body() createUserDto: CreateUserDTO): Promise<UsersEntity> {
+    return this.userServices.createUser(createUserDto);
   }
 }
