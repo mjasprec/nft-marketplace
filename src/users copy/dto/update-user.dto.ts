@@ -7,7 +7,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { UserGender } from '../users-prop.enum';
+import { UserGender } from '../users.model';
 
 export class UpdateUserDto {
   @IsOptional()

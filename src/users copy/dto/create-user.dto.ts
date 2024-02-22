@@ -12,7 +12,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { UserGender, UserRole, UserStatus } from '../users-prop.enum';
+import { UserGender, UserRole, UserStatus } from '../users.model';
 
 export class CreateUserDTO {
   @Length(6, 24)
