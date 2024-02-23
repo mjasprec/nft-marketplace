@@ -41,10 +41,10 @@ export class UsersEntity {
   @Column()
   gender: UserGender;
 
-  @Column()
+  @Column({ default: UserRole.USER })
   role: UserRole;
 
-  @Column()
+  @Column({ default: UserStatus.ACTIVE })
   status: UserStatus;
 
   @DeleteDateColumn({
@@ -54,12 +54,4 @@ export class UsersEntity {
     nullable: true,
   })
   deletedAt: Date | null;
-
-  @DeleteDateColumn({
-    name: 'is_deleted_at',
-    type: 'boolean',
-    default: false,
-    nullable: true,
-  })
-  isDeleted: boolean | null;
 }

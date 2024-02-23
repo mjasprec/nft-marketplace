@@ -71,8 +71,6 @@ export class UsersService extends Repository<UsersEntity> {
       wallet,
       nfts: [],
       gender,
-      role: UserRole.USER,
-      status: UserStatus.ACTIVE,
     });
 
     await this.save(newUser);
