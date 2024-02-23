@@ -35,6 +35,19 @@ export class NftsService extends Repository<NftEntity> {
     return matchedNft;
   }
 
+  async deleteNftByID(id: string): Promise<NftEntity> {
+    const matchedNft = await this.getNftByID(id);
+
+    matchedNft.status = NftStatus.DISABLED;
+
+    const nftAfterRemoval = await this.softRemove(matchedNft);
+
+    console.log('nftAfterRemoval', nftAfterRemoval);
+    console.log('matchedNft', matchedNft);
+
+    return matchedNft;
+  }
+
   async createNft(createNftDto: CreateNftDTO): Promise<NftEntity> {
     const { image, title, description, category, owner, creator } =
       createNftDto;

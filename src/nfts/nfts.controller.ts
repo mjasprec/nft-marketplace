@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Param,
-  // Delete,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete } from '@nestjs/common';
 import { NftsService } from './nfts.service';
 import { CreateNftDTO } from './dto/create-nft.dto';
 import { NftEntity } from './nft.entity';
@@ -24,6 +17,11 @@ export class NftsController {
   @Get('/:id')
   getNftById(@Param('id') id: string): Promise<NftEntity> {
     return this.nftsServices.getNftByID(id);
+  }
+
+  @Delete('/:id')
+  deleteNftById(@Param('id') id: string): Promise<NftEntity> {
+    return this.nftsServices.deleteNftByID(id);
   }
 
   @Post('/')
