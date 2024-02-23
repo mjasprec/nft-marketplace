@@ -3,8 +3,6 @@ import { NftsService } from './nfts.service';
 import { CreateNftDTO } from './dto/create-nft.dto';
 import { NftEntity } from './nft.entity';
 
-// import { GetNftFilterDTO } from './dto/get-nft-filter.dto';
-
 @Controller('nfts')
 export class NftsController {
   constructor(private nftsServices: NftsService) {}
@@ -22,6 +20,11 @@ export class NftsController {
   @Delete('/:id')
   deleteNftById(@Param('id') id: string): Promise<NftEntity> {
     return this.nftsServices.deleteNftByID(id);
+  }
+
+  @Post('/:id')
+  recoverNft(@Param('id') id: string): Promise<NftEntity> {
+    return this.nftsServices.recoverNft(id);
   }
 
   @Post('/')

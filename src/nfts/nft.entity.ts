@@ -35,7 +35,7 @@ export class NftEntity {
   @Column('text', { array: true, default: [] })
   comments?: any[];
 
-  @Column()
+  @Column({ default: NftStatus.ENABLED })
   status: NftStatus;
 
   @DeleteDateColumn({
