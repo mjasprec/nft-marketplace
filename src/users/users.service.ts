@@ -24,6 +24,7 @@ export class UsersService extends Repository<UsersEntity> {
       where: {
         role: UserRole.USER,
         status: UserStatus.ACTIVE,
+        deletedAt: null,
       },
     });
 
