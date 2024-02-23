@@ -44,13 +44,23 @@ export class UsersService extends Repository<UsersEntity> {
   async deleteUserById(id: string): Promise<UsersEntity> {
     const userToRemove = await this.getUserById(id);
 
-    userToRemove.isDeleted = true;
     userToRemove.status = UserStatus.DISABLED;
     console.log('userToRemove', userToRemove);
     const userAfterRemoval = await this.softRemove(userToRemove);
     console.log('userAfterRemoval', userAfterRemoval);
 
     return userToRemove;
+  }
+
+  async recoverUserById(id: string): Promise<UsersEntity> {
+    const matchUser = await this.findOne({
+      where: { id: id },
+      withDeleted: true,
+    });
+
+    await this.recover(matchUser);
+
+    return matchUser;
   }
 
   async createUser(createUserDto: CreateUserDTO): Promise<UsersEntity> {
