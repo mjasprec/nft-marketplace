@@ -1,4 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { NftCategory, NftStatus } from './nfts.model';
 
 @Entity()
@@ -27,9 +32,17 @@ export class NftEntity {
   @Column()
   creator: string;
 
-  @Column()
+  @Column('text', { array: true, default: [] })
   comments?: any[];
 
   @Column()
   status: NftStatus;
+
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    type: 'timestamp',
+    default: null,
+    nullable: true,
+  })
+  deletedAt: Date | null;
 }
