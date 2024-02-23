@@ -4,6 +4,6 @@ import { NftsController } from './nfts.controller';
 
 @Module({
   providers: [NftsService],
-  controllers: [NftsController]
+  controllers: [NftsController],
 })
 export class NftsModule {}
