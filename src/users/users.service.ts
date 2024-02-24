@@ -45,9 +45,8 @@ export class UsersService extends Repository<UsersEntity> {
     const userToRemove = await this.getUserById(id);
 
     userToRemove.status = UserStatus.DISABLED;
-    console.log('userToRemove', userToRemove);
-    const userAfterRemoval = await this.softRemove(userToRemove);
-    console.log('userAfterRemoval', userAfterRemoval);
+
+    await this.softRemove(userToRemove);
 
     return userToRemove;
   }

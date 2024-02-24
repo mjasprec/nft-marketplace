@@ -34,10 +34,7 @@ export class NftsService extends Repository<NftEntity> {
 
     matchedNft.status = NftStatus.DISABLED;
 
-    const nftAfterRemoval = await this.softRemove(matchedNft);
-
-    console.log('nftAfterRemoval', nftAfterRemoval);
-    console.log('matchedNft', matchedNft);
+    await this.softRemove(matchedNft);
 
     return matchedNft;
   }
