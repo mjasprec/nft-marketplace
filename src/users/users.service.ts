@@ -9,9 +9,9 @@ import {
   // UserGender,
   UserStatus,
 } from './users-prop.enum';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 // import { GetUserFilterDTO } from './dto/get-user-filter.dto';
-// import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService extends Repository<UsersEntity> {
@@ -60,6 +60,22 @@ export class UsersService extends Repository<UsersEntity> {
     await this.recover(matchUser);
 
     return matchUser;
+  }
+
+  async updateUser(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UsersEntity> {
+    const matchedUser = await this.getUserById(id);
+
+    Object.assign(matchedUser, {
+      ...updateUserDto,
+      birthday: new Date(updateUserDto.birthday),
+    });
+
+    await this.save(matchedUser);
+
+    return matchedUser;
   }
 
   async createUser(createUserDto: CreateUserDTO): Promise<UsersEntity> {
