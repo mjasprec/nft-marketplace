@@ -1,4 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
+import { UserGender } from '../users-prop.enum';
 
 export class GetUserFilterDTO {
   @IsOptional()
@@ -16,4 +17,8 @@ export class GetUserFilterDTO {
   @IsOptional()
   @IsString()
   searchTerm?: string;
+
+  @IsOptional()
+  @IsString()
+  gender: UserGender;
 }

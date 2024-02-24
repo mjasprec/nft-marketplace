@@ -6,19 +6,23 @@ import {
   Body,
   Delete,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersEntity } from './users.entity';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { GetUserFilterDTO } from './dto/get-user-filter.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private userServices: UsersService) {}
 
   @Get()
-  getUsers(): Promise<UsersEntity[]> {
-    return this.userServices.getUsers();
+  getUsers(
+    @Query() getUserFilterDTO: GetUserFilterDTO,
+  ): Promise<UsersEntity[]> {
+    return this.userServices.getUsers(getUserFilterDTO);
   }
 
   @Get('/:id')

@@ -1,5 +1,5 @@
 import {
-  IsDateString,
+  // IsDateString,
   IsEmail,
   IsNotEmpty,
   IsOptional,
@@ -32,9 +32,9 @@ export class UpdateUserDto {
   aboutMe: string;
 
   @IsOptional()
-  @IsDateString()
+  // @IsDateString()
   @IsNotEmpty()
-  birthday: Date;
+  birthday: string;
 
   @IsOptional()
   @IsNotEmpty()
