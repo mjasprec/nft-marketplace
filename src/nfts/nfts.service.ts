@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { NftEntity } from './nft.entity';
 import { CreateNftDTO } from './dto/create-nft.dto';
-import { NftStatus } from './nfts.model';
+import { NftStatus } from './nfts-props.enum';
 
 @Injectable()
 export class NftsService extends Repository<NftEntity> {
@@ -51,8 +51,7 @@ export class NftsService extends Repository<NftEntity> {
   }
 
   async createNft(createNftDto: CreateNftDTO): Promise<NftEntity> {
-    const { image, title, description, category, owner, creator } =
-      createNftDto;
+    const { image, title, description, category, user, creator } = createNftDto;
 
     const price = Number(createNftDto.price);
 
@@ -62,7 +61,7 @@ export class NftsService extends Repository<NftEntity> {
       description,
       category,
       price,
-      owner,
+      user,
       creator,
       comments: [],
     });

@@ -4,7 +4,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { NftCategory, NftStatus } from './nfts.model';
+import { NftCategory, NftStatus } from './nfts-props.enum';
 
 @Entity()
 export class NftEntity {
@@ -27,7 +27,7 @@ export class NftEntity {
   price: number;
 
   @Column()
-  owner: string;
+  user: string;
 
   @Column()
   creator: string;

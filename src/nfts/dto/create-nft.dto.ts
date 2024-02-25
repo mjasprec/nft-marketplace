@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { NftCategory, NftStatus } from '../nfts.model';
+import { NftCategory, NftStatus } from '../nfts-props.enum';
 
 import { IsNotEmpty, Length, Min, Max, IsNumber } from 'class-validator';
 
@@ -23,7 +23,7 @@ export class CreateNftDTO {
   price: number;
 
   @IsNotEmpty()
-  owner: string;
+  user: string;
 
   @IsNotEmpty()
   creator: string;

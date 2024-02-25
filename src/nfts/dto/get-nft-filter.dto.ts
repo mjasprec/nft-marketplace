@@ -1,10 +1,10 @@
-import { NftCategory } from '../nfts.model';
+import { NftCategory } from '../nfts-props.enum';
 
 export class GetNftFilterDTO {
   title?: string;
   description?: string;
   category?: NftCategory;
-  owner?: string;
+  user?: string;
   creator?: string;
   searchTerm?: string;
 }
