@@ -2,6 +2,7 @@ import { Transform } from 'class-transformer';
 import { NftCategory, NftStatus } from '../nfts-props.enum';
 
 import { IsNotEmpty, Length, Min, Max, IsNumber } from 'class-validator';
+import { UserEntity } from 'src/auth/user.entity';
 
 export class CreateNftDTO {
   @IsNotEmpty()
@@ -23,7 +24,7 @@ export class CreateNftDTO {
   price: number;
 
   @IsNotEmpty()
-  user: string;
+  user: UserEntity;
 
   @IsNotEmpty()
   creator: string;

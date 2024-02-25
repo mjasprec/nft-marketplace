@@ -2,9 +2,11 @@ import {
   Column,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserGender, UserRole, UserStatus } from './user-prop.enum';
+import { NftEntity } from 'src/nfts/nft.entity';
 
 @Entity()
 export class UserEntity {
@@ -35,8 +37,10 @@ export class UserEntity {
   @Column()
   wallet: number;
 
-  @Column('text', { array: true, default: [] })
-  nfts: string[];
+  // @Column('text', { array: true, default: [] })
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @OneToMany((_type) => NftEntity, (nfts) => nfts.user, { eager: true })
+  nfts: NftEntity[];
 
   @Column()
   gender: UserGender;

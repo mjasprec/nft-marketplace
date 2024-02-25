@@ -2,9 +2,11 @@ import {
   Column,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { NftCategory, NftStatus } from './nfts-props.enum';
+import { UserEntity } from 'src/auth/user.entity';
 
 @Entity()
 export class NftEntity {
@@ -26,8 +28,10 @@ export class NftEntity {
   @Column()
   price: number;
 
-  @Column()
-  user: string;
+  // @Column()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @ManyToOne((_type) => UserEntity, (user) => user.nfts, { eager: false })
+  user: UserEntity;
 
   @Column()
   creator: string;
