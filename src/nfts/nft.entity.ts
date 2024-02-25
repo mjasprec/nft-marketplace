@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { NftCategory, NftStatus } from './nfts-props.enum';
 import { UserEntity } from 'src/auth/user.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class NftEntity {
@@ -31,6 +32,7 @@ export class NftEntity {
   // @Column()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @ManyToOne((_type) => UserEntity, (user) => user.nfts, { eager: false })
+  @Exclude({ toPlainOnly: true })
   user: UserEntity;
 
   @Column()

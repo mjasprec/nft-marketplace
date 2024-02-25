@@ -3,6 +3,7 @@ import { DataSource, Repository } from 'typeorm';
 import { NftEntity } from './nft.entity';
 import { CreateNftDTO } from './dto/create-nft.dto';
 import { NftStatus } from './nfts-props.enum';
+import { UserEntity } from 'src/auth/user.entity';
 
 @Injectable()
 export class NftsService extends Repository<NftEntity> {
@@ -50,8 +51,11 @@ export class NftsService extends Repository<NftEntity> {
     return matchedNft;
   }
 
-  async createNft(createNftDto: CreateNftDTO): Promise<NftEntity> {
-    const { image, title, description, category, user, creator } = createNftDto;
+  async createNft(
+    createNftDto: CreateNftDTO,
+    user: UserEntity,
+  ): Promise<NftEntity> {
+    const { image, title, description, category, creator } = createNftDto;
 
     const price = Number(createNftDto.price);
 

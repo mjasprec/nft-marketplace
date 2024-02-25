@@ -11,6 +11,8 @@ import { NftsService } from './nfts.service';
 import { CreateNftDTO } from './dto/create-nft.dto';
 import { NftEntity } from './nft.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { UserEntity } from 'src/auth/user.entity';
+import { GetUser } from 'src/auth/get-user.decorator';
 
 @Controller('nfts')
 @UseGuards(AuthGuard())
@@ -38,7 +40,10 @@ export class NftsController {
   }
 
   @Post('/')
-  createNft(@Body() createNftDto: CreateNftDTO): Promise<NftEntity> {
-    return this.nftsServices.createNft(createNftDto);
+  createNft(
+    @Body() createNftDto: CreateNftDTO,
+    @GetUser() user: UserEntity,
+  ): Promise<NftEntity> {
+    return this.nftsServices.createNft(createNftDto, user);
   }
 }
