@@ -2,8 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { NftEntity } from './nft.entity';
 import { CreateNftDTO } from './dto/create-nft.dto';
-import { NftStatus } from './nfts-props.enum';
+import {
+  // NftCategory,
+  NftStatus,
+} from './nfts-props.enum';
 import { UserEntity } from 'src/auth/user.entity';
+import { GetNftFilterDTO } from './dto/get-nft-filter.dto';
 
 @Injectable()
 export class NftsService extends Repository<NftEntity> {
@@ -11,13 +15,55 @@ export class NftsService extends Repository<NftEntity> {
     super(NftEntity, dataSource.createEntityManager());
   }
 
-  async getNfts(): Promise<NftEntity[]> {
-    return await this.find({
-      where: {
-        status: NftStatus.ENABLED,
-        deletedAt: null,
-      },
-    });
+  async getNfts(
+    getNftFilterDTO: GetNftFilterDTO,
+    userEntity: UserEntity,
+  ): Promise<NftEntity[]> {
+    const { title, description, category, user, searchTerm } = getNftFilterDTO;
+
+    console.log('userEntity', userEntity);
+
+    const query = this.createQueryBuilder('nfts');
+
+    if (title) {
+      query.where('LOWER(nfts.title) = LOWER(:title)', {
+        title,
+      });
+    }
+
+    if (description) {
+      query.where('LOWER(nfts.description) = LOWER(:description)', {
+        description: `%${description}%`,
+      });
+    }
+
+    if (category) {
+      query.where('LOWER(nfts.category) = LOWER(:category)', {
+        category,
+      });
+    }
+
+    if (user) {
+      query.where('LOWER(nfts.user) = LOWER(:user)', {
+        user,
+      });
+    }
+
+    if (searchTerm) {
+      query.where(
+        'LOWER(nfts.title) LIKE LOWER(:searchTerm) OR LOWER(nfts.description) LIKE LOWER(:searchTerm) OR LOWER(nfts.category) LIKE LOWER(:searchTerm) OR LOWER(nfts.user) LIKE LOWER(:searchTerm)',
+        {
+          searchTerm: `%${searchTerm}%`,
+        },
+      );
+    }
+
+    query.andWhere('nfts.status = :status', { status: NftStatus.ENABLED });
+    query.andWhere({ user: userEntity });
+
+    const nfts = await query.getMany();
+
+    return nfts;
   }
 
   async getNftByID(id: string): Promise<NftEntity> {
