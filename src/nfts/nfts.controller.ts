@@ -1,9 +1,19 @@
-import { Controller, Post, Body, Get, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { NftsService } from './nfts.service';
 import { CreateNftDTO } from './dto/create-nft.dto';
 import { NftEntity } from './nft.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('nfts')
+@UseGuards(AuthGuard())
 export class NftsController {
   constructor(private nftsServices: NftsService) {}
 
