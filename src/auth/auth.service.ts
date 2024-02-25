@@ -1,7 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService extends Repository<UserEntity> {
@@ -12,9 +18,11 @@ export class AuthService extends Repository<UserEntity> {
   async createUser(
     authCredentialsDto: AuthCredentialsDto,
   ): Promise<UserEntity> {
-    const { username, password, email, firstName, lastName, aboutMe, gender } =
+    const { username, email, firstName, lastName, aboutMe, gender } =
       authCredentialsDto;
 
+    const salt = await bcrypt.genSalt();
+    const password = await bcrypt.hash(authCredentialsDto.password, salt);
     const wallet = Number(authCredentialsDto.wallet);
     const birthday = new Date(authCredentialsDto.birthday);
 
@@ -31,8 +39,26 @@ export class AuthService extends Repository<UserEntity> {
       gender,
     });
 
-    await this.save(newUser);
+    try {
+      await this.save(newUser);
+    } catch (err) {
+      if (err.code === '23505') {
+        throw new ConflictException('Username/Email already exists');
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
 
     return newUser;
+  }
+
+  async signIn(username: string, password: string): Promise<string> {
+    const user = await this.findOne({ where: { username } });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return 'Success';
+    } else {
+      throw new UnauthorizedException('Please check your login credentials');
+    }
   }
 }

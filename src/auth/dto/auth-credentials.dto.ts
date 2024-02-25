@@ -11,6 +11,7 @@ import {
   IsDateString,
   IsOptional,
   IsString,
+  Matches,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { UserGender, UserRole, UserStatus } from '../user-prop.enum';
@@ -22,6 +23,9 @@ export class AuthCredentialsDto {
 
   @IsString()
   @Length(6, 30)
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: 'Password is weak. Must include 1 lower and upper case letter',
+  })
   password: string;
 
   @IsEmail()
