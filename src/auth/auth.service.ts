@@ -12,17 +12,11 @@ export class AuthService extends Repository<UserEntity> {
   async createUser(
     authCredentialsDto: AuthCredentialsDto,
   ): Promise<UserEntity> {
-    const {
-      username,
-      password,
-      email,
-      firstName,
-      lastName,
-      // aboutMe, gender
-    } = authCredentialsDto;
+    const { username, password, email, firstName, lastName, aboutMe, gender } =
+      authCredentialsDto;
 
-    // const wallet = Number(authCredentialsDto.wallet);
-    // const birthday = new Date(authCredentialsDto.birthday);
+    const wallet = Number(authCredentialsDto.wallet);
+    const birthday = new Date(authCredentialsDto.birthday);
 
     const newUser = this.create({
       username,
@@ -30,11 +24,11 @@ export class AuthService extends Repository<UserEntity> {
       email,
       firstName,
       lastName,
-      // aboutMe,
-      // birthday,
-      // wallet,
-      // nfts: [],
-      // gender,
+      aboutMe,
+      birthday,
+      wallet,
+      nfts: [],
+      gender,
     });
 
     await this.save(newUser);

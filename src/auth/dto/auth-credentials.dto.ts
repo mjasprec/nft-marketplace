@@ -2,18 +2,18 @@ import {
   IsEmail,
   IsNotEmpty,
   Length,
-  // MaxLength,
-  // Min,
-  // MinLength,
-  // IsNumber,
-  // Max,
+  MaxLength,
+  Min,
+  MinLength,
+  IsNumber,
+  Max,
   // // IsDate,
-  // IsDateString,
-  // IsOptional,
+  IsDateString,
+  IsOptional,
   IsString,
 } from 'class-validator';
-// import { Transform } from 'class-transformer';
-// import { UserGender, UserRole, UserStatus } from '../user-prop.enum';
+import { Transform } from 'class-transformer';
+import { UserGender, UserRole, UserStatus } from '../user-prop.enum';
 
 export class AuthCredentialsDto {
   @IsString()
@@ -33,27 +33,27 @@ export class AuthCredentialsDto {
   @IsNotEmpty()
   lastName: string;
 
-  // @IsOptional()
-  // @MinLength(2)
-  // @MaxLength(255)
-  // aboutMe: string;
+  @IsOptional()
+  @MinLength(2)
+  @MaxLength(255)
+  aboutMe: string;
 
-  // @IsDateString()
-  // @IsNotEmpty()
-  // birthday: Date;
+  @IsDateString()
+  @IsNotEmpty()
+  birthday: Date;
 
-  // @IsNumber()
-  // @Min(0)
-  // @Max(1000000)
-  // @Transform(({ value }) => Number(value))
-  // wallet: number;
+  @IsNumber()
+  @Min(0)
+  @Max(1000000)
+  @Transform(({ value }) => Number(value))
+  wallet: number;
 
-  // nfts: [];
+  nfts: [];
 
-  // @IsNotEmpty()
-  // gender: UserGender;
+  @IsNotEmpty()
+  gender: UserGender;
 
-  // role: UserRole;
+  role: UserRole;
 
-  // status: UserStatus;
+  status: UserStatus;
 }
