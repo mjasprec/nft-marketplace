@@ -5,7 +5,7 @@ import { DataSource, Repository } from 'typeorm';
 import { UsersEntity } from './users.entity';
 import { CreateUserDTO } from './dto/create-user.dto';
 import {
-  // UserRole,
+  UserRole,
   // UserGender,
   UserStatus,
 } from './users-prop.enum';
@@ -23,17 +23,24 @@ export class UsersService extends Repository<UsersEntity> {
       getUserFilterDTO;
 
     const query = this.createQueryBuilder('users');
+    // .andWhere('user.deletedAt = :deletedAt', { deletedAt: null });
 
     if (username) {
-      query.where('LOWER(users.username) = LOWER(:username)', { username });
+      query.where('LOWER(users.username) = LOWER(:username)', {
+        username,
+      });
     }
 
     if (firstName) {
-      query.where('LOWER(users.firstName) = LOWER(:firstName)', { firstName });
+      query.where('LOWER(users.firstName) = LOWER(:firstName)', {
+        firstName,
+      });
     }
 
     if (lastName) {
-      query.where('LOWER(users.lastName) = LOWER(:lastName)', { lastName });
+      query.where('LOWER(users.lastName) = LOWER(:lastName)', {
+        lastName,
+      });
     }
 
     if (gender) {
@@ -49,15 +56,11 @@ export class UsersService extends Repository<UsersEntity> {
       );
     }
 
-    const users = await query.getMany();
+    query
+      .andWhere('users.status = :status', { status: UserStatus.ACTIVE })
+      .andWhere('users.role = :role', { role: UserRole.USER });
 
-    // const allUsers = await this.find({
-    //   where: {
-    //     role: UserRole.USER,
-    //     status: UserStatus.ACTIVE,
-    //     deletedAt: null,
-    //   },
-    // });
+    const users = await query.getMany();
 
     return users;
   }
