@@ -30,18 +30,27 @@ export class NftsController {
   }
 
   @Get('/:id')
-  getNftById(@Param('id') id: string): Promise<NftEntity> {
-    return this.nftsServices.getNftByID(id);
+  getNftById(
+    @Param('id') id: string,
+    @GetUser() user: UserEntity,
+  ): Promise<NftEntity> {
+    return this.nftsServices.getNftByID(id, user);
   }
 
   @Delete('/:id')
-  deleteNftById(@Param('id') id: string): Promise<NftEntity> {
-    return this.nftsServices.deleteNftByID(id);
+  deleteNftById(
+    @Param('id') id: string,
+    @GetUser() user: UserEntity,
+  ): Promise<NftEntity> {
+    return this.nftsServices.deleteNftByID(id, user);
   }
 
   @Post('/:id')
-  recoverNft(@Param('id') id: string): Promise<NftEntity> {
-    return this.nftsServices.recoverNft(id);
+  recoverNft(
+    @Param('id') id: string,
+    @GetUser() user: UserEntity,
+  ): Promise<NftEntity> {
+    return this.nftsServices.recoverNft(id, user);
   }
 
   @Post('/')

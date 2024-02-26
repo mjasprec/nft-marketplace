@@ -21,8 +21,6 @@ export class NftsService extends Repository<NftEntity> {
   ): Promise<NftEntity[]> {
     const { title, description, category, user, searchTerm } = getNftFilterDTO;
 
-    console.log('userEntity', userEntity);
-
     const query = this.createQueryBuilder('nfts');
 
     if (title) {
@@ -51,7 +49,7 @@ export class NftsService extends Repository<NftEntity> {
 
     if (searchTerm) {
       query.where(
-        'LOWER(nfts.title) LIKE LOWER(:searchTerm) OR LOWER(nfts.description) LIKE LOWER(:searchTerm) OR LOWER(nfts.category) LIKE LOWER(:searchTerm) OR LOWER(nfts.user) LIKE LOWER(:searchTerm)',
+        '(LOWER(nfts.title) LIKE LOWER(:searchTerm) OR LOWER(nfts.description) LIKE LOWER(:searchTerm) OR LOWER(nfts.category) LIKE LOWER(:searchTerm) OR LOWER(nfts.user) LIKE LOWER(:searchTerm))',
         {
           searchTerm: `%${searchTerm}%`,
         },
@@ -66,8 +64,8 @@ export class NftsService extends Repository<NftEntity> {
     return nfts;
   }
 
-  async getNftByID(id: string): Promise<NftEntity> {
-    const matchedNft = await this.findOne({ where: { id } });
+  async getNftByID(id: string, user: UserEntity): Promise<NftEntity> {
+    const matchedNft = await this.findOne({ where: { id, user } });
 
     if (!matchedNft) {
       throw new NotFoundException('No matching NFT found');
@@ -76,8 +74,8 @@ export class NftsService extends Repository<NftEntity> {
     return matchedNft;
   }
 
-  async deleteNftByID(id: string): Promise<NftEntity> {
-    const matchedNft = await this.getNftByID(id);
+  async deleteNftByID(id: string, user: UserEntity): Promise<NftEntity> {
+    const matchedNft = await this.getNftByID(id, user);
 
     matchedNft.status = NftStatus.DISABLED;
 
@@ -86,9 +84,9 @@ export class NftsService extends Repository<NftEntity> {
     return matchedNft;
   }
 
-  async recoverNft(id: string): Promise<NftEntity> {
+  async recoverNft(id: string, user: UserEntity): Promise<NftEntity> {
     const matchedNft = await this.findOne({
-      where: { id: id },
+      where: { id, user },
       withDeleted: true,
     });
 

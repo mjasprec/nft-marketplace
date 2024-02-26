@@ -23,7 +23,6 @@ export class UsersService extends Repository<UsersEntity> {
       getUserFilterDTO;
 
     const query = this.createQueryBuilder('users');
-    // .andWhere('user.deletedAt = :deletedAt', { deletedAt: null });
 
     if (username) {
       query.where('LOWER(users.username) = LOWER(:username)', {
@@ -49,7 +48,7 @@ export class UsersService extends Repository<UsersEntity> {
 
     if (searchTerm) {
       query.where(
-        'LOWER(users.username) LIKE LOWER(:searchTerm) OR LOWER(users.firstName) LIKE LOWER(:searchTerm) OR LOWER(users.lastName) LIKE LOWER(:searchTerm)',
+        '(LOWER(users.username) LIKE LOWER(:searchTerm) OR LOWER(users.firstName) LIKE LOWER(:searchTerm) OR LOWER(users.lastName) LIKE LOWER(:searchTerm))',
         {
           searchTerm: `%${searchTerm}%`,
         },
