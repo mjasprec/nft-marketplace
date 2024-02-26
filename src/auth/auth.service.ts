@@ -10,6 +10,7 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt.payload.interface';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
 export class AuthService extends Repository<UserEntity> {
@@ -20,9 +21,7 @@ export class AuthService extends Repository<UserEntity> {
     super(UserEntity, dataSource.createEntityManager());
   }
 
-  async createUser(
-    authCredentialsDto: AuthCredentialsDto,
-  ): Promise<UserEntity> {
+  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<UserEntity> {
     const { username, email, firstName, lastName, aboutMe, gender } =
       authCredentialsDto;
 
@@ -71,5 +70,28 @@ export class AuthService extends Repository<UserEntity> {
     } else {
       throw new UnauthorizedException('Please check your login credentials');
     }
+  }
+
+  async updateProfile(
+    id: string,
+    updateProfileDto: UpdateProfileDto,
+    user: UserEntity,
+  ): Promise<UserEntity> {
+    const matchedUser = await this.findOne({
+      where: {
+        id,
+        username: user.username,
+        email: user.email,
+      },
+    });
+
+    Object.assign(matchedUser, {
+      ...updateProfileDto,
+      birthday: new Date(updateProfileDto.birthday),
+    });
+
+    await this.save(matchedUser);
+
+    return matchedUser;
   }
 }
