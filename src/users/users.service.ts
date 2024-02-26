@@ -3,7 +3,6 @@ import { DataSource, Repository } from 'typeorm';
 // import { UsersRepository } from './user.repository';
 // import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from './users.entity';
-import { CreateUserDTO } from './dto/create-user.dto';
 import {
   UserRole,
   // UserGender,
@@ -109,30 +108,5 @@ export class UsersService extends Repository<UsersEntity> {
     await this.save(matchedUser);
 
     return matchedUser;
-  }
-
-  async createUser(createUserDto: CreateUserDTO): Promise<UsersEntity> {
-    const { username, email, password, firstName, lastName, aboutMe, gender } =
-      createUserDto;
-
-    const wallet = Number(createUserDto.wallet);
-    const birthday = new Date(createUserDto.birthday);
-
-    const newUser = this.create({
-      username,
-      email,
-      password,
-      firstName,
-      lastName,
-      aboutMe,
-      birthday,
-      wallet,
-      nfts: [],
-      gender,
-    });
-
-    await this.save(newUser);
-
-    return newUser;
   }
 }

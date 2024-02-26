@@ -75,13 +75,17 @@ export class NftsService extends Repository<NftEntity> {
   }
 
   async deleteNftByID(id: string, user: UserEntity): Promise<NftEntity> {
-    const matchedNft = await this.getNftByID(id, user);
+    try {
+      const matchedNft = await this.getNftByID(id, user);
 
-    matchedNft.status = NftStatus.DISABLED;
+      matchedNft.status = NftStatus.DISABLED;
 
-    await this.softRemove(matchedNft);
+      await this.softRemove(matchedNft);
 
-    return matchedNft;
+      return matchedNft;
+    } catch (error) {
+      throw new NotFoundException('No matching NFT found');
+    }
   }
 
   async recoverNft(id: string, user: UserEntity): Promise<NftEntity> {
