@@ -131,8 +131,6 @@ export class NftsService extends Repository<NftEntity> {
 
     await this.save(newNft);
 
-    console.log('newNft', newNft);
-
     return newNft;
   }
 }

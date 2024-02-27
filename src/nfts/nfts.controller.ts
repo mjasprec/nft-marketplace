@@ -39,6 +39,7 @@ export class NftsController {
     @Param('id') id: string,
     @GetUser() user: UserEntity,
   ): Promise<NftEntity> {
+    this.logger.verbose(`User: ${user.firstName} retrieving NFT ID: ${id}`);
     return this.nftsServices.getNftByID(id, user);
   }
 
@@ -47,6 +48,7 @@ export class NftsController {
     @Param('id') id: string,
     @GetUser() user: UserEntity,
   ): Promise<NftEntity> {
+    this.logger.verbose(`User: ${user.firstName} deleting NFT ID: ${id}`);
     return this.nftsServices.deleteNftByID(id, user);
   }
 
@@ -55,6 +57,7 @@ export class NftsController {
     @Param('id') id: string,
     @GetUser() user: UserEntity,
   ): Promise<NftEntity> {
+    this.logger.verbose(`User: ${user.firstName} recovering NFT ID: ${id}`);
     return this.nftsServices.recoverNft(id, user);
   }
 
@@ -63,6 +66,9 @@ export class NftsController {
     @Body() createNftDto: CreateNftDTO,
     @GetUser() user: UserEntity,
   ): Promise<NftEntity> {
+    this.logger.verbose(
+      `User: ${user.firstName} creating a new NFT: ${JSON.stringify(createNftDto)}`,
+    );
     return this.nftsServices.createNft(createNftDto, user);
   }
 }
