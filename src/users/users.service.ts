@@ -1,13 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-// import { UsersRepository } from './user.repository';
-// import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from './users.entity';
-import {
-  UserRole,
-  // UserGender,
-  UserStatus,
-} from './users-prop.enum';
+import { UserRole, UserStatus } from './users-prop.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { GetUserFilterDTO } from './dto/get-user-filter.dto';
 
