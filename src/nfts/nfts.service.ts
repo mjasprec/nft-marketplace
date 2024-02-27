@@ -1,16 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { NftEntity } from './nft.entity';
 import { CreateNftDTO } from './dto/create-nft.dto';
-import {
-  // NftCategory,
-  NftStatus,
-} from './nfts-props.enum';
+import { NftStatus } from './nfts-props.enum';
 import { UserEntity } from 'src/auth/user.entity';
 import { GetNftFilterDTO } from './dto/get-nft-filter.dto';
 
 @Injectable()
 export class NftsService extends Repository<NftEntity> {
+  private logger = new Logger('NftsController');
+
   constructor(private dataSource: DataSource) {
     super(NftEntity, dataSource.createEntityManager());
   }
@@ -19,6 +23,9 @@ export class NftsService extends Repository<NftEntity> {
     getNftFilterDTO: GetNftFilterDTO,
     userEntity: UserEntity,
   ): Promise<NftEntity[]> {
+    this.logger.verbose(
+      `User: ${userEntity.firstName} retrieving all NFTs.. filtered by: ${JSON.stringify(getNftFilterDTO)}`,
+    );
     try {
       const { title, description, category, user, searchTerm } =
         getNftFilterDTO;
@@ -67,11 +74,13 @@ export class NftsService extends Repository<NftEntity> {
 
       return nfts;
     } catch (error) {
+      this.logger.error(error);
       throw new NotFoundException('No matching NFT found');
     }
   }
 
   async getNftByID(id: string, user: UserEntity): Promise<NftEntity> {
+    this.logger.verbose(`User: ${user.firstName} retrieving NFT ID: ${id}`);
     try {
       const matchedNft = await this.findOne({ where: { id, user } });
 
@@ -79,13 +88,17 @@ export class NftsService extends Repository<NftEntity> {
         throw new NotFoundException('No matching NFT found');
       }
 
+      this.logger.verbose(`Matching NFT: ${matchedNft.id}`);
+
       return matchedNft;
     } catch (error) {
+      this.logger.error(error);
       throw new NotFoundException('No matching id/Invalid id');
     }
   }
 
   async deleteNftByID(id: string, user: UserEntity): Promise<NftEntity> {
+    this.logger.verbose(`User: ${user.firstName} deleting NFT ID: ${id}`);
     try {
       const matchedNft = await this.getNftByID(id, user);
 
@@ -93,44 +106,63 @@ export class NftsService extends Repository<NftEntity> {
 
       await this.softRemove(matchedNft);
 
+      this.logger.verbose(`Successfully deleted NFT with the id ${id}`);
+
       return matchedNft;
     } catch (error) {
+      this.logger.error(`Failed to delete: ${error.message}`);
       throw new NotFoundException('No matching NFT found');
     }
   }
 
   async recoverNft(id: string, user: UserEntity): Promise<NftEntity> {
-    const matchedNft = await this.findOne({
-      where: { id, user },
-      withDeleted: true,
-    });
+    try {
+      const matchedNft = await this.findOne({
+        where: { id, user },
+        withDeleted: true,
+      });
 
-    await this.recover(matchedNft);
+      this.logger.verbose(`Successfully recovered NFT`);
 
-    return matchedNft;
+      await this.recover(matchedNft);
+
+      return matchedNft;
+    } catch (error) {
+      this.logger.error(`Failed to recover: ${error.message}`);
+      throw new InternalServerErrorException();
+    }
   }
 
   async createNft(
     createNftDto: CreateNftDTO,
     user: UserEntity,
   ): Promise<NftEntity> {
-    const { image, title, description, category, creator } = createNftDto;
+    this.logger.verbose(`User: ${user.firstName} creating a new NFT`);
 
-    const price = Number(createNftDto.price);
+    try {
+      const { image, title, description, category, creator } = createNftDto;
 
-    const newNft = this.create({
-      image,
-      title,
-      description,
-      category,
-      price,
-      user,
-      creator,
-      comments: [],
-    });
+      const price = Number(createNftDto.price);
 
-    await this.save(newNft);
+      const newNft = this.create({
+        image,
+        title,
+        description,
+        category,
+        price,
+        user,
+        creator,
+        comments: [],
+      });
 
-    return newNft;
+      await this.save(newNft);
+
+      this.logger.verbose(`created new NFT: ${JSON.stringify(newNft)}`);
+
+      return newNft;
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException();
+    }
   }
 }
