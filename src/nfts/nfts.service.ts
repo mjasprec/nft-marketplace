@@ -19,49 +19,56 @@ export class NftsService extends Repository<NftEntity> {
     getNftFilterDTO: GetNftFilterDTO,
     userEntity: UserEntity,
   ): Promise<NftEntity[]> {
-    const { title, description, category, user, searchTerm } = getNftFilterDTO;
+    try {
+      const { title, description, category, user, searchTerm } =
+        getNftFilterDTO;
 
-    const query = this.createQueryBuilder('nfts');
+      const query = this.createQueryBuilder('nfts');
 
-    if (title) {
-      query.where('LOWER(nfts.title) = LOWER(:title)', {
-        title,
-      });
+      if (title) {
+        query.where('LOWER(nfts.title) LIKE LOWER(:title)', {
+          title,
+        });
+      }
+
+      if (description) {
+        query.where('LOWER(nfts.description) LIKE LOWER(:description)', {
+          description: `%${description}%`,
+        });
+      }
+
+      if (category) {
+        query.where('LOWER(nfts.category) = LOWER(:category)', {
+          category,
+        });
+      }
+
+      if (user) {
+        query.where('LOWER(nfts.user) LIKE LOWER(:user)', {
+          user,
+        });
+      }
+
+      // ? find nfts by user
+
+      if (searchTerm) {
+        query.where(
+          'LOWER(nfts.title) LIKE LOWER(:searchTerm) OR LOWER(nfts.description) LIKE LOWER(:searchTerm) OR LOWER(nfts.category) LIKE LOWER(:searchTerm)',
+          {
+            searchTerm: `%${searchTerm}%`,
+          },
+        );
+      }
+
+      query.andWhere('nfts.status = :status', { status: NftStatus.ENABLED });
+      query.andWhere({ user: userEntity });
+
+      const nfts = await query.getMany();
+
+      return nfts;
+    } catch (error) {
+      throw new NotFoundException('No matching NFT found');
     }
-
-    if (description) {
-      query.where('LOWER(nfts.description) = LOWER(:description)', {
-        description: `%${description}%`,
-      });
-    }
-
-    if (category) {
-      query.where('LOWER(nfts.category) = LOWER(:category)', {
-        category,
-      });
-    }
-
-    if (user) {
-      query.where('LOWER(nfts.user) = LOWER(:user)', {
-        user,
-      });
-    }
-
-    if (searchTerm) {
-      query.where(
-        '(LOWER(nfts.title) LIKE LOWER(:searchTerm) OR LOWER(nfts.description) LIKE LOWER(:searchTerm) OR LOWER(nfts.category) LIKE LOWER(:searchTerm) OR LOWER(nfts.user) LIKE LOWER(:searchTerm))',
-        {
-          searchTerm: `%${searchTerm}%`,
-        },
-      );
-    }
-
-    query.andWhere('nfts.status = :status', { status: NftStatus.ENABLED });
-    query.andWhere({ user: userEntity });
-
-    const nfts = await query.getMany();
-
-    return nfts;
   }
 
   async getNftByID(id: string, user: UserEntity): Promise<NftEntity> {

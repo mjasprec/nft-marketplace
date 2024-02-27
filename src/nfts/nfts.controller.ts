@@ -7,6 +7,7 @@ import {
   Delete,
   UseGuards,
   Query,
+  Logger,
 } from '@nestjs/common';
 import { NftsService } from './nfts.service';
 import { CreateNftDTO } from './dto/create-nft.dto';
@@ -19,6 +20,7 @@ import { GetNftFilterDTO } from './dto/get-nft-filter.dto';
 @Controller('nfts')
 @UseGuards(AuthGuard())
 export class NftsController {
+  private logger = new Logger('NftsController');
   constructor(private nftsServices: NftsService) {}
 
   @Get('/')
@@ -26,6 +28,9 @@ export class NftsController {
     @Query() getNftFilterDTO: GetNftFilterDTO,
     @GetUser() user: UserEntity,
   ): Promise<NftEntity[]> {
+    this.logger.verbose(
+      `User: ${user.firstName} retrieving all NFTs.. filtered by: ${JSON.stringify(getNftFilterDTO)}`,
+    );
     return this.nftsServices.getNfts(getNftFilterDTO, user);
   }
 
