@@ -4,6 +4,7 @@ import { NftsModule } from './nfts/nfts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { configValidationSchema } from './config.schema';
 
 console.log('PROCESS ENV', process.env.STAGE);
 
@@ -11,6 +12,7 @@ console.log('PROCESS ENV', process.env.STAGE);
   imports: [
     ConfigModule.forRoot({
       envFilePath: [`.env.${process.env.STAGE}`],
+      validationSchema: configValidationSchema,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
